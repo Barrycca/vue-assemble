@@ -1,0 +1,609 @@
+<template>
+  <div class="orderConfirm-wrap">
+    <v-header title="订单确认" :haveBack="true"></v-header>
+    <div class="tab">
+      <ul>
+        <li
+          v-for="(item,index) in tabArr"
+          :key="index"
+          :class="{'on':clickIndex==index}"
+          @click="tabClick(index)"
+        >{{item}}</li>
+      </ul>
+    </div>
+    <div class="container">
+      <div class="buyer c-box" v-show="clickIndex==0">
+        <div class="c-nav">
+          <div class="nav-item" @click="chooseBuyer">
+            <div class="left">
+              <div class="tt">{{choseBuyer?(choseBuyer.name+" "+choseBuyer.phone):"购票人"}}</div>
+            </div>
+            <div class="right">
+              <div class="icon-arr"></div>
+            </div>
+          </div>
+          <div class="nav-item" @click="chooseReal">
+            <div class="left">
+              <div class="tt" v-if="!realInfo">观演人实名认证</div>
+              <div class="tt"  v-if="realInfo">{{realInfo?realInfo.name:"观演人实名认证"}}</div>
+              <div class="address" v-if="realInfo">身份证 {{realInfo.idNum}}</div>
+            </div>
+            <div class="right">
+              <div class="icon-arr"></div>
+            </div>
+          </div>
+        </div>
+        <div class="nv-tips">
+          <i class="icon-warn"></i>
+          <p>通过订单中二维码，直接验票入场</p>
+        </div>
+      </div>
+      <div class="buyer c-box" v-show="clickIndex==1">
+        <div class="c-nav">
+          <div class="nav-item" @click="chooseAddress">
+            <div class="left">
+              <div class="tt" v-if="!addressInfo">购票人收货地址</div>
+              <div class="tt" v-if="addressInfo">{{addressInfo.name+' '+addressInfo.phone}}</div>
+              <div class="address" v-if="addressInfo">{{addressInfo.address}}</div>
+            </div>
+            <div class="right">
+              <div class="icon-arr"></div>
+            </div>
+          </div>
+        </div>
+        <div class="nv-tips">
+          <i class="icon-warn"></i>
+          <p>门票统一在项目开票后1-3个工作日内寄出</p>
+        </div>
+      </div>
+      <div class="buyer c-box" v-show="clickIndex==2">
+        <div class="c-nav">
+          <div class="nav-item">
+            <div class="left">
+              <div class="tt">深圳市罗湖区黄贝岭街道文华大厦西座10楼DE</div>
+              <div class="sub-line">
+                <div class="work">上班:周一至周日9:30-18:30</div>
+                <div class="tel">
+                  <div class="lb">电话:</div>
+                  <a href="tel:4007-180-666" class="tel-ct">4007-180-666</a>
+                </div>
+              </div>
+            </div>
+            <div class="right">
+              <div class="icon-location"></div>
+            </div>
+          </div>
+          <div class="nav-item" @click="chooseBuyer">
+            <div class="left">
+              <div class="tt">{{choseBuyer?(choseBuyer.name+" "+choseBuyer.phone):"购票人"}}</div>
+            </div>
+            <div class="right">
+              <div class="icon-arr"></div>
+            </div>
+          </div>
+        </div>
+        <div class="nv-tips">
+          <i class="icon-warn"></i>
+          <p>门票统一在项目开票后以短信方式通知上门取票</p>
+        </div>
+      </div>
+      <div class="order-info">
+        <div class="od-box">
+          <div class="lf">
+            <div class="title">2019年世界经典原版音乐《猫》 CATS-深圳</div>
+            <div class="bt">
+              <div class="showtime">2019-05-06 周六 11:00</div>
+              <div class="showad">华润深圳湾体育中心“春茧”体育场</div>
+            </div>
+          </div>
+          <div class="poster" :style="{backgroundImage:'url(' + bannerBg + ')'}"></div>
+        </div>
+        <div class="setes">
+          <ul>
+            <li>3排6座</li>
+            <li>3排7座</li>
+            <li>3排8座</li>
+            <li>3排9座</li>
+          </ul>
+        </div>
+        <div class="total-set">共4张票</div>
+      </div>
+      <div class="remarket">
+        <div class="tt">留言备注</div>
+        <div class="textarea">
+          <textarea name id placeholder="请输入留言备注"></textarea>
+        </div>
+      </div>
+      <div class="agreement">
+        <div class="col">
+          <span>我已阅读并同意</span>
+          <span class="red">《趣票购票协议》</span>
+        </div>
+        <div class="col">票品为不记名商品，不支持退换，遗失不补。</div>
+      </div>
+    </div>
+    <div class="under-pay">
+      <div class="lf">
+        <div class="gray">应付</div>
+        <div class="red" @click="sliderUp">¥2700</div>
+        <i class="icon-up" @click="sliderUp"></i>
+      </div>
+      <div class="to-pay-btn" @click="$router.push('/payState')">去支付</div>
+    </div>
+
+    <div class="silder-up-box" v-show="sliderShow" @click="hideSlider">
+      <div class="silder-wrap" ref="slider" @click.stop>
+        <div class="title">结算明细</div>
+        <div class="silder-item">
+          <div class="sub-title">商品金额</div>
+          <div class="col">
+            <div class="lf">￥440 x 3</div>
+            <div class="rt">06.15 （周六）19:30</div>
+          </div>
+          <div class="col">
+            <div class="lf">￥440 x 3</div>
+            <div class="rt">06.15 （周六）19:30</div>
+          </div>
+        </div>
+        <div class="silder-item">
+          <div class="sub-title">快递运费</div>
+          <div class="col">
+            <div class="lf">￥0</div>
+            <div class="rt">深圳地区满200元免运费</div>
+          </div>
+        </div>
+        <div class="silder-item">
+          <div class="sub-title">优惠</div>
+          <div class="col">
+            <div class="lf">-￥10</div>
+            <div class="rt">玛蒂尔达9折红包</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "orderConfirm",
+  components: {
+    vHeader
+  },
+  data: function() {
+    return {
+      tabArr: ["电子票", "快递配送", "上门自取"],
+      bannerBg: "/static/images/header_bg.png",
+      clickIndex: 0,
+      sliderShow: false,
+      choseBuyer: "",
+      addressInfo: "",
+      realInfo: "",
+      authentication: false
+    };
+  },
+  mounted() {},
+  activated() {
+    let buyerInfo = localStorage.getItem("buyerInfo");
+    let addressInfo = localStorage.getItem("addressInfo");
+    let realInfo = localStorage.getItem("realInfo");
+    if (buyerInfo) {
+      this.choseBuyer = JSON.parse(buyerInfo);
+    }
+    if (addressInfo) {
+      this.addressInfo = JSON.parse(addressInfo);
+    }
+    if (realInfo) {
+      this.realInfo = JSON.parse(realInfo);
+    }
+  },
+  methods: {
+    tabClick(index) {
+      this.clickIndex = index;
+    },
+    sliderUp() {
+      this.sliderShow = !this.sliderShow;
+      if (this.sliderShow) {
+        setTimeout(() => {
+          this.$refs.slider.style.transform = "translateY(0)";
+        }, 100);
+      } else {
+        this.$refs.slider.style.transform = "translateY(100%)";
+      }
+    },
+    hideSlider() {
+      this.$refs.slider.style.transform = "translateY(100%)";
+      setTimeout(() => {
+        this.sliderShow = false;
+      }, 100);
+    },
+    chooseAddress() {
+      this.$router.push("/addressListChose");
+    },
+    chooseBuyer() {
+      this.$router.push("/buyerList");
+    },
+    chooseReal() {
+      this.$router.push("/observerListChose");
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (
+      to.path !== "/buyerList" &&
+      to.path !== "/addressListChose" &&
+      to.path !== "/observerListChose"
+    ) {
+      localStorage.removeItem("buyerInfo");
+      localStorage.removeItem("addressInfo");
+      localStorage.removeItem("realInfo");
+    }
+    next();
+  }
+};
+</script>
+
+<style scoped lang="stylus">
+.orderConfirm-wrap {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  background-color: $bodyBg;
+
+  .tab {
+    border-bottom: 1px solid $lineCl;
+    background-color: $bgWhite;
+
+    ul {
+      display: flex;
+      align-items: center;
+      height: 80px;
+
+      li {
+        flex: 1;
+        height: 80px;
+        line-height: 80px;
+        font-size: 30px;
+        color: $subCl;
+        text-align: center;
+
+        &.on {
+          position: relative;
+          color: $themeCl;
+
+          &::before {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            margin-left: -30px;
+            display: block;
+            content: '';
+            width: 60px;
+            height: 6px;
+            background-color: $themeCl;
+          }
+        }
+      }
+    }
+  }
+
+  .container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    .c-box {
+      padding-left: 20px;
+      background-color: $bgWhite;
+
+      .c-nav {
+        .nav-item {
+          display: flex;
+          align-items: center;
+          padding: 42px 20px 28px 0;
+          border-bottom: 1px solid $lineCl;
+
+          .left {
+            flex: 1;
+
+            .tt {
+              font-size: 30px;
+              color: $titleCl;
+            }
+
+            .address {
+              font-size: 24px;
+              color: $grayCl;
+              margin-top: 16px;
+            }
+
+            .sub-line {
+              display: flex;
+              align-items: center;
+              color: $grayCl;
+              margin-top: 16px;
+
+              .work {
+                padding-right: 12px;
+                border-right: 1px solid $btnBd;
+              }
+
+              .tel {
+                display: flex;
+                align-items: center;
+                padding-left: 12px;
+
+                .tel-ct {
+                  color: $blueCl;
+                }
+              }
+            }
+          }
+
+          .right {
+            .icon-arr {
+              width: 24px;
+              height: 24px;
+              background-repeat: no-repeat;
+              background-size: contain;
+              background-position: center;
+              background-image: url('/static/images/enter_ar.png');
+            }
+
+            .icon-location {
+              width: 44px;
+              height: 44px;
+              background-repeat: no-repeat;
+              background-size: contain;
+              background-position: center;
+              background-image: url('/static/images/location.png');
+            }
+          }
+        }
+      }
+
+      .nv-tips {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        color: $grayCl;
+        padding: 22px 0;
+
+        i.icon-warn {
+          display: block;
+          width: 24px;
+          height: 24px;
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+          background-image: url('/static/images/icon_tips.png');
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .order-info {
+      padding: 30px 24px 30px 20px;
+      background-color: $bgWhite;
+      margin-top: 10px;
+
+      .od-box {
+        display: flex;
+        align-items: stretch;
+
+        .lf {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          flex: 1;
+
+          .title {
+            max-width: 440px;
+            font-size: 30px;
+            line-height: 1.5;
+            color: $titleCl;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; // 控制多行的行数
+            -webkit-box-orient: vertical;
+          }
+
+          .bt {
+            font-size: 24px;
+            color: $grayCl;
+
+            .showtime {
+              margin-bottom: 12px;
+            }
+          }
+        }
+
+        .poster {
+          width: 128px;
+          height: 172px;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+        }
+      }
+
+      .setes {
+        margin-top: 24px;
+
+        ul {
+          display: flex;
+          align-items: center;
+          font-size: 24px;
+          color: $ipCl;
+
+          li {
+            padding: 0 16px;
+            border-right: 1px solid $btnBd;
+
+            &:first-child {
+              padding-left: 0;
+            }
+
+            &:last-child {
+              border-right: 0;
+            }
+          }
+        }
+      }
+
+      .total-set {
+        font-size: 24px;
+        color: $ipCl;
+        margin-top: 12px;
+      }
+    }
+
+    .remarket {
+      padding: 30px 24px 128px 20px;
+      background-color: $bgWhite;
+      margin-top: 10px;
+
+      .tt {
+        font-size: 30px;
+        color: $titleCl;
+      }
+
+      .textarea {
+        margin-top: 24px;
+
+        textarea {
+          width: 100%;
+          height: 180px;
+          outline: none;
+          background-color: $bodyBg;
+          border: none;
+          padding: 20px;
+          box-sizing: border-box;
+        }
+      }
+    }
+
+    .agreement {
+      padding: 24px 20px;
+      background-color: $agBg;
+      color: $ipCl;
+
+      .col {
+        margin-bottom: 14px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .red {
+          color: $themeCl;
+        }
+      }
+    }
+  }
+
+  .under-pay {
+    display: flex;
+    align-items: center;
+    background-color: $bgWhite;
+
+    .lf {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 0 36px;
+
+      .gray {
+        font-size: 24px;
+        color: $grayCl;
+      }
+
+      .red {
+        color: $themeCl;
+        font-size: 32px;
+        padding: 0 8px;
+      }
+
+      .icon-up {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background-image: url('/static/images/nav_icon_drop-up_gray.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+
+    .to-pay-btn {
+      width: 312px;
+      flex: 312px 0 0;
+      height: 98px;
+      line-height: 98px;
+      background-color: $themeCl;
+      color: $bdClWhite;
+      font-size: 32px;
+      text-align: center;
+    }
+  }
+
+  .silder-up-box {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 98px);
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+
+    .silder-wrap {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background-color: $bgWhite;
+      padding: 0 20px;
+      border-radius: 15px 15px 0 0;
+      padding-bottom: 130px;
+      transform: translateY(100%);
+      transition: 0.5s;
+
+      .title {
+        font-size: 32px;
+        color: $ipCl;
+        text-align: center;
+        padding: 34px 0;
+        border-bottom: 1px solid $lineCl;
+      }
+
+      .silder-item {
+        margin-top: 40px;
+
+        .sub-title {
+          font-size: 28px;
+          margin-bottom: 18px;
+          color: $ipCl;
+        }
+
+        .col {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 24px;
+          margin-bottom: 12px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .lf {
+            color: $themeCl;
+          }
+
+          .rt {
+            color: $grayCl;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

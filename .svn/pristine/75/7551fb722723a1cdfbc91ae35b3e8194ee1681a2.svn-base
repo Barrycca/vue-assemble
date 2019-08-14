@@ -1,0 +1,35 @@
+<template>
+  <div class="index-wrap">
+    <header class="c-header">乐现场</header>
+    <div class="banner-bg">
+      <div class="lf">
+        <div class="avt">
+          <img src="../../../static/images/header.png" alt>
+        </div>
+        <div class="ct">
+          <h3>乐现场</h3>
+          <div class="desc">提供最好玩的娱乐生活</div>
+        </div>
+      </div>
+      <div class="share">分享</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "mine",
+  methods: {},
+  data() {
+    return {};
+  },
+  mounted() {},
+  activated() {}
+};
+</script>
+
+<style scoped lang="stylus">
+.c-header {
+  background-color: $headerBg;
+}
+</style>

@@ -1,0 +1,433 @@
+<template>
+  <div class="assemble-wrap">
+    <v-header title="拼团" :haveBack="true"></v-header>
+    <div class="unjoin">
+      <div class="items">
+        <div class="poster" :style="{backgroundImage:'url(' + bannerBg + ')'}"></div>
+        <div class="it-r">
+          <div class="tt">奔跑吧2016 浙江卫视跨年演唱会</div>
+          <div class="mid">
+            <div class="time">2015.12.31(周六)</div>
+            <div class="address">华润深圳湾体育中心＂春茧＂体育场</div>
+          </div>
+          <div class="bottom">
+            <div class="lf">
+              <div class="pc">
+                <div class="price">￥380-￥1238</div>
+                <div class="mb">2人团</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="statistics">
+        <div class="state">
+          <div class="ing">
+            <div class="time">
+              <div class="t-txt">剩余</div>
+              <div class="cut-down">
+                <p>{{hr}}</p>
+                <span class="colon">:</span>
+                <p>{{min}}</p>
+                <span class="colon">:</span>
+                <p>{{sec}}</p>
+              </div>
+            </div>
+            <div class="total">
+              已有
+              <span class="alr">1</span> 人参与，还差
+              <span class="catch">4</span> 人拼团成功
+            </div>
+          </div>
+        </div>
+        <div class="member">
+          <ul>
+            <li>
+              <div class="u-avt" :style="{backgroundImage:'url(' + '/static/images/av.png' + ')'}">
+                <div class="lab">团长</div>
+              </div>
+              <div class="name">wilbur</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+          </ul>
+        </div>
+        <div class="j-btn">我要参团</div>
+      </div>
+      <div class="explain">
+        <div class="rule" @click="ruleToast">
+          <div class="lf">拼团玩法</div>
+          <div class="rt">
+            <div class="sm">拼团规则</div>
+            <div class="arr"></div>
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num1">1</i>
+              <div class="txt">开团或参团</div>
+            </div>
+          </div>
+          <div class="st-ar"></div>
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num2">2</i>
+              <div class="txt">开团或参团</div>
+            </div>
+          </div>
+          <div class="st-ar"></div>
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num3">3</i>
+              <div class="txt">开团或参团</div>
+            </div>
+            <div class="tips">（不满自动退款）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "assemble",
+  components: {
+    vHeader
+  },
+  data() {
+    return {
+      bannerBg: "/static/images/header_bg.png",
+      hr: 0,
+      min: 0,
+      sec: 0
+    };
+  },
+  methods: {
+    ruleToast() {
+      this.toast("暂无规则");
+    },
+    countdown() {
+      const end = Date.parse(
+        new Date("2019-06-01 10:30:00".replace(/-/g, "/"))
+      );
+      const now = Date.parse(new Date());
+      const msec = end - now;
+      let hr = parseInt((msec / 1000 / 60 / 60) % 24);
+      let min = parseInt((msec / 1000 / 60) % 60);
+      let sec = parseInt((msec / 1000) % 60);
+      this.hr = hr > 9 ? hr : "0" + hr;
+      this.min = min > 9 ? min : "0" + min;
+      this.sec = sec > 9 ? sec : "0" + sec;
+      const that = this;
+      setTimeout(function() {
+        that.countdown();
+      }, 1000);
+    }
+  },
+  mounted() {
+    this.countdown();
+  },
+  activated() {}
+};
+</script>
+
+<style scoped lang="stylus">
+.assemble-wrap {
+  background-color: $bodyBg;
+
+  .items {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 19px;
+    background-color: #fff;
+
+    .poster {
+      width: 195px;
+      height: 272px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      margin-right: 25px;
+    }
+
+    .it-r {
+      display: flex;
+      flex-flow: column;
+      flex: 1;
+
+      .tt {
+        color: $titleCl;
+        font-size: 30px;
+        margin-top: 10px;
+      }
+
+      .mid {
+        flex: 1;
+        margin-top: 24px;
+
+        .time, .address {
+          color: $grayCl;
+          font-size: 22px;
+        }
+
+        .address {
+          margin-top: 20px;
+        }
+      }
+
+      .bottom {
+        display: flex;
+        align-items: center;
+
+        .lf {
+          flex: 1;
+
+          .pc {
+            display: flex;
+            align-items: baseline;
+            color: $themeCl;
+            margin-bottom: 16px;
+
+            .mb {
+              font-size: 24px;
+            }
+
+            .price {
+              font-size: 32px;
+              margin-right: 15px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .statistics {
+    padding: 74px 45px 28px;
+    background-color: $bgWhite;
+
+    .state {
+      .ing {
+        text-align: center;
+
+        .time {
+          justify-content: center;
+          display: flex;
+          align-items: center;
+
+          .t-txt {
+            font-size: 30px;
+            margin-right: 23px;
+            color: $subCl;
+          }
+
+          .cut-down {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+
+            p {
+              width: 44px;
+              height: 44px;
+              line-height: 44px;
+              text-align: center;
+              background-color: $headerBg;
+              color: $fontClWhite;
+            }
+
+            span {
+              &.colon {
+                padding: 0 9px;
+              }
+            }
+          }
+        }
+
+        .total {
+          margin-top: 28px;
+          color: $ipCl;
+          font-size: 26px;
+
+          .alr {
+            color: $themeCl;
+            font-size: 32px;
+            font-weight: bold;
+          }
+
+          .catch {
+            font-size: 32px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .member {
+      margin-top: 70px;
+
+      ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 45px;
+
+        li {
+          position: relative;
+          text-align: center;
+
+          .u-avt {
+            width: 80px;
+            height: 80px;
+            background-image: url('/static/images/member.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            .lab {
+              position: absolute;
+              bottom: 30px;
+              left: 50%;
+              margin-left: -30px;
+              width: 60px;
+              display: inline-block;
+              font-size: 14px;
+              background-color: $themeCl;
+              padding: 4px 6px;
+              border-radius: 4px;
+              color: $fontClWhite;
+            }
+          }
+
+          .name {
+            margin-top: 20px;
+          }
+        }
+      }
+    }
+
+    .j-btn {
+      height: 80px;
+      line-height: 80px;
+      font-size: 32px;
+      text-align: center;
+      color: $fontClWhite;
+      background-color: $themeCl;
+      border-radius: 80px;
+      margin-top: 64px;
+    }
+  }
+
+  .explain {
+    background-color: $bgWhite;
+    margin-top: 10px;
+
+    .rule {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 25px 20px 25px 0;
+      margin-left: 20px;
+      border-bottom: 1px solid $lineCl;
+
+      .lf {
+        font-size: 28px;
+        color: $ipCl;
+      }
+
+      .rt {
+        display: flex;
+        align-items: center;
+
+        .sm {
+          font-size: 24px;
+          color: $grayCl;
+          margin-right: 10px;
+        }
+
+        .arr {
+          width: 26px;
+          height: 26px;
+          background-image: url('/static/images/in1.png');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+        }
+      }
+    }
+
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 25px 20px 157px;
+
+      .st-ar {
+        width: 24px;
+        height: 24px;
+        background-image: url('/static/images/in1.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .step {
+        font-size: 26px;
+        text-align: center;
+
+        .tips {
+          font-size: 22px;
+          color: $tipsCl;
+          margin-top: 9px;
+        }
+
+        .sb {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .icon-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 30px 0 0;
+            font-size: 22px;
+            width: 30px;
+            height: 30px;
+            background: #666;
+            color: $fontClWhite;
+            border-radius: 100%;
+            /* &.num1 {
+                          background-image: url('/static/images/1.png');
+                        }
+            
+                        &.num2 {
+                          background-image: url('/static/images/2.png');
+                        }
+            
+                        &.num3 {
+                          background-image: url('/static/images/3.png');
+                        } */
+          }
+        }
+      }
+    }
+  }
+}
+</style>

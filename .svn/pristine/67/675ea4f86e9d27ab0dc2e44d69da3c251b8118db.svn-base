@@ -1,0 +1,26 @@
+$headerBg = #282828;
+$headerCl = #fff;
+$fontClWhite = #fff;
+$bdClWhite = #fff;
+$bgWhite = #fff;
+$bdCl = #999999;
+$btnBd = #E8E8E8;
+$lineCl = #F0F0F0;
+$grayCl = #999999;
+$themeCl = #E5004F;
+$greenCl = #14AE67;
+$pinkCl = #F17394;
+$blueCl = #4C80FF;
+$bodyBg = #F2F2F2;
+$titleCl = #000000;
+$subCl = #666666;
+$ipCl = #333333;
+$tipsCl = #bbb;
+$itemBd = #E3E3E3;
+$ttBd = #CECECE;
+$placeCl = #DDDDDD;
+$failBg = #6B6A6A;
+$agBg = #FFFAFC;
+$noneBg = #EBEBEB;
+// 字号
+$headerFz = 36px;

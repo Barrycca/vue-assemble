@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1,maximum=scale=1"><meta name=format-detection content="telephone=yes"><link rel=bookmark type=image/x-icon href=static/images/logo_icon.png><link rel="shortcut icon" href=static/images/logo_icon.png><title>测试你的快乐来源</title><link href=./static/css/app.a1e58bd5161396ea1b7a3ce98485d51f.css rel=stylesheet></head><body><div id=app></div><script src=https://res.wx.qq.com/open/js/jweixin-1.4.0.js></script><script>//运行环境判断
+      function checkIDE(check, refer) {
+      return String(window.navigator.userAgent.toLowerCase().match(check)) == refer;
+      }
+      function getCookie(objName) {
+      var arrStr = document.cookie.split('; ');
+      for (var i = 0; i < arrStr.length; i++) { var temp=arrStr[i].split('=');
+
+          if (temp[0] == objName) {
+            if (temp.length > 2) {
+              return decodeURIComponent(temp[2]);
+            } else {
+              return decodeURIComponent(temp[1]);
+            }
+          }
+        }
+        return '';
+      }
+
+      var aconfig = getCookie("jet_cookie_act_AccessConfig");
+      if (aconfig != "") {
+        aconfig = eval("(" + aconfig + ")");
+      }
+      if (checkIDE(/MicroMessenger/i, "micromessenger")) {
+        wx.config({
+          debug: false,
+          appId: aconfig[0],
+          timestamp: aconfig[2],
+          nonceStr: aconfig[3],
+          signature: aconfig[1],
+          jsApiList: [
+            'checkJsApi',
+            'chooseImage','getLocalImgData',
+            'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems', 'closeWindow', 'showAllNonBaseMenuItem', 'previewImage'
+          ]
+        });
+        var cfg = {
+          title: "测试你的快乐来源",
+          desc: "一起探索关于快乐的秘密~",
+          link: "https://wechat.qupiaowang.com/act/index.aspx?t=psychologyTest.html",
+          imgUrl: "https://wechat.qupiaowang.com/act/static/images/shareicn.png",
+        };
+        wx.ready(function () {
+          wx.showOptionMenu();
+          wx.onMenuShareTimeline(cfg);
+          wx.onMenuShareQQ(cfg);
+          wx.onMenuShareAppMessage(cfg);
+          wx.onMenuShareWeibo(cfg);
+        })
+      }</script><script type=text/javascript src=./static/js/manifest.b25f0794212f25a76742.js></script><script type=text/javascript src=./static/js/vendor.ee3a01fe61e06656c95c.js></script><script type=text/javascript src=./static/js/app.04324d96932be5d39b36.js></script></body></html>

@@ -1,0 +1,20 @@
+<template>
+  <div class="orderDetail-wrap">
+    <v-header title="奔跑吧2016 浙江卫视跨年演唱会" :haveBack="true"></v-header>
+
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: "orderDetail",
+  data: function() {
+    return {};
+  },
+  methods: {}
+};
+</script>
+
+<style scoped>
+</style>

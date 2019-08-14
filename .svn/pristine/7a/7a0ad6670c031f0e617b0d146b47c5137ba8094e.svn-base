@@ -1,0 +1,285 @@
+<template>
+  <div class="orderDetail-wrap">
+    <v-header title="订单详情" :haveBack="true"></v-header>
+    <div class="container">
+      <div class="top-bg">
+        <div class="deal-state">
+          <h2>交易取消</h2>
+          <div class="desc">订单超时取消</div>
+        </div>
+      </div>
+      <div class="order-info">
+        <div class="info-item">
+          <div class="item-detail">
+            <div class="lf">
+              <div class="tt">涉谷纯爱物语专辑2018全球风暴来袭巡回演唱会——深圳站</div>
+              <div class="address">华润深圳湾体育中心“春茧”体育场</div>
+            </div>
+            <div class="rt">
+              <img src="/static/images/header.png" alt>
+            </div>
+          </div>
+          <div class="price">
+            <div class="now">¥2700</div>
+            <div class="origin">/3张票</div>
+          </div>
+        </div>
+
+        <div class="info-item product-info">
+          <div class="title">商品信息</div>
+          <div class="info-box">
+            <ul>
+              <li>
+                <div class="left">￥40 x1</div>
+                <div class="right">2019-12-28 周六 19:30</div>
+              </li>
+              <li>
+                <div class="left">￥40 x1</div>
+                <div class="right">2019-12-28 周六 19:30</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="title">快递配送</div>
+          <div class="info-box">
+            <ul>
+              <li>
+                <div class="left">收货人：</div>
+                <div class="right">Ice</div>
+              </li>
+              <li>
+                <div class="left">手机号：</div>
+                <div class="right">13147100000</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="title">订单信息</div>
+          <div class="info-box">
+            <ul>
+              <li>
+                <div class="left">订单编号：</div>
+                <div class="right">3123131</div>
+              </li>
+              <li>
+                <div class="left">下单时间：</div>
+                <div class="right">2019-05-14 16:32:14</div>
+              </li>
+              <li>
+                <div class="left">留言备注：</div>
+                <div class="right">好位置</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="title">订单信息</div>
+          <div class="info-box">
+            <ul>
+              <li>
+                <div class="left">商品金额：</div>
+                <div class="right">￥100</div>
+              </li>
+              <li>
+                <div class="left">快递运费：</div>
+                <div class="right">￥12</div>
+              </li>
+              <li>
+                <div class="left">优惠金额：</div>
+                <div class="right">-￥100</div>
+              </li>
+              <li>
+                <div class="left">应付金额：</div>
+                <div class="right red">￥100</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "orderDetail",
+  components: {
+    vHeader
+  },
+  data: function() {
+    return {};
+  },
+  methods: {}
+};
+</script>
+
+<style scoped lang="stylus">
+.orderDetail-wrap {
+  display: flex;
+  flex-flow: column;
+
+  .container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    .top-bg {
+      height: 448px;
+      width: 100%;
+      background-image: url('/static/images/bg2.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      padding: 46px 20px;
+
+      .deal-state {
+        color: $fontClWhite;
+
+        h2 {
+          font-size: 44px;
+          margin-bottom: 20px;
+        }
+
+        .desc {
+          font-size: 24px;
+        }
+      }
+    }
+
+    .order-info {
+      position: relative;
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-top: -230px;
+      background-color: $bgWhite;
+      box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.08);
+      padding: 0 40px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-left: -88px;
+        display: block;
+        content: '';
+        width: 176px;
+        height: 16px;
+        background-color: #F00470;
+        border-radius: 0 0 15px 15px;
+      }
+
+      &::after {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        margin-left: -88px;
+        display: block;
+        content: '';
+        width: 176px;
+        height: 16px;
+        background-color: rgb(228, 228, 228);
+        border-radius: 15px 15px 0 0;
+      }
+
+      .info-item {
+        padding: 30px 0;
+        border-bottom: 1px dashed $lineCl;
+
+        &.product-info {
+          .info-box {
+            ul {
+              li {
+                .left {
+                  flex: 150px 0 0;
+                }
+              }
+            }
+          }
+        }
+
+        .item-detail {
+          display: flex;
+          align-items: center;
+
+          .lf {
+            flex: 1;
+            margin-right: 54px;
+
+            .tt {
+              font-size: 30px;
+              color: $titleCl;
+              line-height: 44px;
+            }
+
+            .address {
+              font-size: 24px;
+              color: $grayCl;
+              margin-top: 16px;
+              margin-bottom: 40px;
+            }
+          }
+
+          .rt {
+            flex: 100px 0 0;
+
+            img {
+              width: 100%;
+            }
+          }
+        }
+
+        .price {
+          display: flex;
+          align-items: center;
+
+          .now {
+            font-size: 32px;
+            color: $themeCl;
+          }
+
+          .origin {
+            font-size: 24px;
+            color: $ipCl;
+          }
+        }
+
+        >.title {
+          color: $titleCl;
+          font-size: 30px;
+          margin-bottom: 24px;
+        }
+
+        .info-box {
+          ul {
+            li {
+              display: flex;
+              align-items: center;
+              font-size: 24px;
+              color: $grayCl;
+              margin-bottom: 14px;
+
+              .right {
+                &.red {
+                  color: $themeCl;
+                }
+              }
+
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</style>

@@ -1,0 +1,578 @@
+<template>
+  <div class="orderDetail-wrap">
+    <v-header title="奔跑吧2016 浙江卫视跨年演唱会" :haveBack="true"></v-header>
+    <div class="ass-wrap">
+      <div class="items">
+        <div class="poster" :style="{backgroundImage:'url(' + bannerBg + ')'}"></div>
+        <div class="it-r">
+          <div class="tt">奔跑吧2016 浙江卫视跨年演唱会</div>
+          <div class="mid">
+            <div class="time">2015.12.31(周六)</div>
+            <div class="address">华润深圳湾体育中心＂春茧＂体育场</div>
+          </div>
+          <div class="bottom">
+            <div class="lf">
+              <div class="pc">
+                <div class="price">￥380-￥1238</div>
+                <div class="mb">2人团</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="know-list">
+        <div class="know-item" @click="showServiceActive">
+          <div class="lf">
+            <div class="l-tt">服务：</div>
+            <div class="l-ct">
+              真票保证
+              <span>·</span> 在线选座
+              <span>·</span> 电子票
+            </div>
+          </div>
+          <div class="rt">
+            <div class="arr"></div>
+          </div>
+        </div>
+        <div class="know-item" @click="showKnowActive">
+          <div class="lf">
+            <div class="l-tt">购票须知</div>
+          </div>
+          <div class="rt">
+            <div class="arr"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="explain">
+        <div class="rule" @click="ruleToast">
+          <div class="lf">拼团玩法</div>
+          <div class="rt">
+            <div class="sm">拼团规则</div>
+            <div class="arr"></div>
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num1">1</i>
+              <div class="txt">开团或参团</div>
+            </div>
+          </div>
+          <div class="st-ar"></div>
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num2">2</i>
+              <div class="txt">开团或参团</div>
+            </div>
+          </div>
+          <div class="st-ar"></div>
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num3">3</i>
+              <div class="txt">开团或参团</div>
+            </div>
+            <div class="tips">（不满自动退款）</div>
+          </div>
+        </div>
+      </div>
+      <div class="order-detail">
+        <div class="tt">演出详情</div>
+        <div class="detail-ct-box" :class="{'all':showMoreFlag}">
+          <div class="dt-ct">
+            <img src="/static/images/header_bg.png" alt>
+            <img src="/static/images/header_bg.png" alt>
+            <img src="/static/images/header_bg.png" alt>
+          </div>
+        </div>
+        <div class="show-more" @click="showMore" v-if="!showMoreFlag"></div>
+      </div>
+    </div>
+    <div class="buy-bottom">
+      <div class="service">
+        <img src="/static/images/service.png" alt>
+        <p>客服</p>
+      </div>
+      <div class="op-btns">
+        <div class="o-btn pink">
+          <div class="prc">￥120起</div>
+          <div class="info">单独购买</div>
+        </div>
+        <div class="o-btn red">
+          <div class="prc">￥80起</div>
+          <div class="info">拼团购买</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "orderDetail",
+  components: {
+    vHeader
+  },
+  data: function() {
+    return {
+      bannerBg: "/static/images/header_bg.png",
+      showMoreFlag: false,
+      servicePopData: [
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>真票保证</h3>
+                      </div>
+                      <div class="low-txt">趣票所出售的票均为真票，请放心购买</div>`,
+          class: "update-class"
+        },
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>在线选座</h3>
+                      </div>
+                      <div class="low-txt">该演出支持在线选座</div>`,
+          class: "update-class"
+        }
+      ],
+      shouldKnowData: [
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>演出时间</h3>
+                      </div>
+                      <div class="low-txt">2019-05-20 周六 14:00</div>`,
+          class: "update-class"
+        },
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>演出场馆</h3>
+                      </div>
+                      <div class="low-txt">华润深圳湾体育中心</div>`,
+          class: "update-class"
+        },
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>演出时长</h3>
+                      </div>
+                      <div class="low-txt">约120分钟（以现场为准）</div>`,
+          class: "update-class"
+        },
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>儿童入场提示</h3>
+                      </div>
+                      <div class="low-txt">1.2米以下儿童谢绝入场（儿童项目除外），1.2米以上儿童需持
+票入场</div>`,
+          class: "update-class"
+        },
+        {
+          content: `<div class="l-tt">
+                        <div class="dot"></div>
+                        <h3>禁止事项</h3>
+                      </div>
+                      <div class="low-txt">由于安保与版权的原因，大多数演出、展览及比赛场馆</div>`,
+          class: "update-class"
+        }
+      ]
+    };
+  },
+  methods: {
+    ruleToast() {
+      this.toast("暂无规则");
+    },
+    showMore() {
+      this.showMoreFlag = true;
+    },
+    showServiceActive() {
+      this.$createActionSheet({
+        class: "popUp-box",
+        cancelTxt: "明白了",
+        title: "服务",
+        data: this.servicePopData,
+        onSelect: (item, index) => {},
+        onCancel: () => {}
+      }).show();
+    },
+    showKnowActive() {
+      this.$createActionSheet({
+        class: "popUp-box",
+        cancelTxt: "明白了",
+        title: "服务",
+        data: this.shouldKnowData,
+        onSelect: (item, index) => {},
+        onCancel: () => {}
+      }).show();
+    }
+  }
+};
+</script>
+<style lang="stylus">
+.cube-action-sheet-panel {
+  border-radius: 15px 15px 0 0;
+  overflow: hidden;
+
+  .cube-action-sheet-title {
+    font-size: 32px;
+    color: $ipCl;
+  }
+
+  .cube-action-sheet-content {
+    min-height: 600px;
+  }
+
+  .cube-action-sheet-space {
+    height: 0;
+  }
+
+  .cube-action-sheet-cancel {
+    span {
+      background-color: $themeCl;
+      color: $fontClWhite;
+    }
+  }
+
+  .update-class {
+    .l-tt {
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        background-color: $themeCl;
+        border-radius: 100%;
+        margin-right: 10px;
+      }
+    }
+
+    .low-txt {
+      text-align: left;
+      white-space: normal;
+      padding-left: 20px;
+      margin-top: 18px;
+      font-size: 24px;
+      color: $grayCl;
+    }
+  }
+}
+</style>
+
+<style scoped lang="stylus">
+.orderDetail-wrap {
+  background-color: $bodyBg;
+
+  .ass-wrap {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 186px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    .items {
+      display: flex;
+      margin-bottom: 10px;
+      padding: 19px;
+      background-color: #fff;
+
+      .poster {
+        width: 195px;
+        height: 272px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        margin-right: 25px;
+      }
+
+      .it-r {
+        display: flex;
+        flex-flow: column;
+        flex: 1;
+
+        .tt {
+          color: $titleCl;
+          font-size: 30px;
+          margin-top: 10px;
+        }
+
+        .mid {
+          flex: 1;
+          margin-top: 24px;
+
+          .time, .address {
+            color: $grayCl;
+            font-size: 22px;
+          }
+
+          .address {
+            margin-top: 20px;
+          }
+        }
+
+        .bottom {
+          display: flex;
+          align-items: center;
+
+          .lf {
+            flex: 1;
+
+            .pc {
+              display: flex;
+              align-items: baseline;
+              color: $themeCl;
+              margin-bottom: 16px;
+
+              .mb {
+                font-size: 24px;
+              }
+
+              .price {
+                font-size: 32px;
+                margin-right: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .know-list {
+      background-color: $bgWhite;
+      margin-top: 10px;
+
+      .know-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 30px 20px 30px 0;
+        margin-left: 20px;
+        border-bottom: 1px solid $lineCl;
+
+        .lf {
+          font-size: 24px;
+          color: $ipCl;
+          display: flex;
+          align-items: center;
+
+          .l-tt {
+            color: $grayCl;
+          }
+
+          .l-ct {
+            >span {
+              color: $themeCl;
+            }
+          }
+        }
+
+        .rt {
+          display: flex;
+          align-items: center;
+
+          .sm {
+            font-size: 24px;
+            color: $grayCl;
+            margin-right: 10px;
+          }
+
+          .arr {
+            width: 26px;
+            height: 26px;
+            background-image: url('/static/images/in1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          }
+        }
+      }
+    }
+
+    .explain {
+      background-color: $bgWhite;
+      margin-top: 10px;
+
+      .rule {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 20px 26px 0;
+        margin-left: 20px;
+        border-bottom: 1px solid $lineCl;
+
+        .lf {
+          font-size: 28px;
+          color: $ipCl;
+        }
+
+        .rt {
+          display: flex;
+          align-items: center;
+
+          .sm {
+            font-size: 24px;
+            color: $grayCl;
+            margin-right: 10px;
+          }
+
+          .arr {
+            width: 26px;
+            height: 26px;
+            background-image: url('/static/images/in1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          }
+        }
+      }
+
+      .steps {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 25px 20px;
+
+        .st-ar {
+          width: 24px;
+          height: 24px;
+          background-image: url('/static/images/in1.png');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+        }
+
+        .step {
+          font-size: 26px;
+          text-align: center;
+
+          .tips {
+            font-size: 22px;
+            color: $tipsCl;
+            margin-top: 9px;
+          }
+
+          .sb {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .icon-num {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex: 30px 0 0;
+              font-size: 22px;
+              width: 30px;
+              height: 30px;
+              line-height: 30px;
+              background: #666;
+              color: $fontClWhite;
+              border-radius: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    .order-detail {
+      padding: 27px 20px;
+      margin-top: 10px;
+      background-color: $bgWhite;
+
+      img {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      >.tt {
+        font-size: 28px;
+        color: $ipCl;
+        margin-bottom: 39px;
+      }
+
+      .detail-ct-box {
+        max-height: 600px;
+        overflow: hidden;
+
+        &.all {
+          max-height: none;
+        }
+      }
+
+      .show-more {
+        height: 60px;
+        background-image: url('/static/images/pull.png');
+        background-repeat: no-repeat;
+        background-size: 18px 18px;
+        background-position: center;
+      }
+    }
+  }
+
+  .buy-bottom {
+    display: flex;
+    align-items: center;
+    height: 98px;
+    padding: 0 20px;
+    background-color: $bgWhite;
+    border-top: 1px solid $bodyBg;
+
+    .service {
+      flex: 150px 0 0;
+      text-align: center;
+
+      img {
+        width: 44px;
+        height: 44px;
+      }
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
+
+    .op-btns {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      border-radius: 80px;
+      overflow: hidden;
+
+      .o-btn {
+        flex: 1;
+        padding-top: 12px;
+        padding-bottom: 11px;
+        text-align: center;
+        color: $fontClWhite;
+
+        .prc {
+          font-size: 32px;
+        }
+
+        .info {
+          font-size: 22px;
+          margin-top: 4px;
+        }
+
+        &.pink {
+          background-color: $pinkCl;
+        }
+
+        &.red {
+          background-color: $themeCl;
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+</style>

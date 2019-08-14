@@ -1,0 +1,354 @@
+<template>
+  <div class="index-wrap">
+    <v-header title="乐现场" :haveBack="false"></v-header>
+    <div class="banner-bg" :style="{backgroundImage:'url(' + bannerBg + ')'}">
+      <div class="lf">
+        <div class="avt">
+          <img src="../../../static/images/header.png" alt>
+        </div>
+        <div class="ct">
+          <h3>乐现场</h3>
+          <div class="desc">提供最好玩的娱乐生活</div>
+        </div>
+      </div>
+      <div class="share">分享</div>
+    </div>
+    <div class="index-tab">
+      <ul v-if="false">
+        <li v-for="(item,index) in tabList" :key="index">{{item}}</li>
+      </ul>
+      <div class="filter">
+        <ul>
+          <li
+            :class="{'active':filterIndex === index}"
+            v-for="(item,index) in filterList"
+            :key="index"
+            @click="filterIt(item,index)"
+          >{{item}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="content-scroll-wrapper">
+      <div class="content-scroll-list-wrap" ref="scrollWrapper">
+        <cube-scroll
+          ref="contentScroll"
+          :data="list"
+          :options="options"
+          @pulling-down="onPullingDown"
+          @pulling-up="onPullingUp"
+        >
+          <div class="list-item" v-for="(item,index) in list" :key="index">
+            <div class="poster" :style="{backgroundImage:'url(' + bannerBg + ')'}"></div>
+            <div class="it-r">
+              <div class="tt">奔跑吧2016 浙江卫视跨年演唱会{{index}}</div>
+              <div class="mid">
+                <div class="time">2015.12.31(周六)</div>
+                <div class="address">华润深圳湾体育中心＂春茧＂体育场</div>
+              </div>
+              <div class="bottom">
+                <div class="lf">
+                  <div class="pc">
+                    <div class="mb" v-if="index==0">2人团</div>
+                    <div class="price">￥280起</div>
+                  </div>
+                  <div class="original" v-if="index==0">单买价￥300元</div>
+                </div>
+                <div class="rt">
+                  <div class="btn rd" v-if="index==0" @click="toAssemble">去拼团</div>
+                  <div class="btn rd" v-else>去购买</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </cube-scroll>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "index",
+  methods: {
+    //选择过滤
+    filterIt(item, index) {
+      this.filterIndex = index;
+      this.filterType = item;
+      this.pageIndex = 1;
+      this.getList();
+    },
+    //获取列表
+    getList() {
+      this.$api.indexList
+        .indexList({
+          pageIndex: this.pageIndex,
+          pageTotal: 10,
+          filterType: this.filterType
+        })
+        .then(res => {
+          // 执行某些操作
+          this.toast("请求了");
+        });
+    },
+    toAssemble(){
+      this.$router.push('/assemble')
+    },
+    onPullingDown() {
+      if (this.list.length) {
+        setTimeout(() => {
+          this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
+          this.$refs.contentScroll.forceUpdate();
+        }, 1000);
+      } else {
+        this.$refs.contentScroll.forceUpdate();
+      }
+    },
+    onPullingUp() {
+      setTimeout(() => {
+        this.list = this.list.concat(1);
+      }, 1000);
+    },
+    onImgLoad() {
+      const contentScroll = this.$refs.contentScroll;
+      contentScroll.scroll.beforePullDown && contentScroll.refresh();
+    }
+  },
+  data() {
+    return {
+      bannerBg: "/static/images/header_bg.png",
+      pageIndex: 1,
+      filterList: ["本周", "下周", "热销", "推荐"],
+      filterIndex: "",
+      filterType: "",
+      tabList: ["演出", "话题"],
+      list: [, , , , , , , , , , , , ,],
+      options: {
+        pullDownRefresh: {
+          threshold: 60,
+          // stop: 44,
+          stopTime: 1000,
+          txt: " "
+        },
+        pullUpLoad: true
+      },
+      secondStop: 26
+    };
+  },
+  components: {
+    vHeader
+  },
+  mounted() {
+    this.getList();
+  },
+  activated() {}
+};
+</script>
+<style lang="stylus">
+.index-wrap {
+  .cube-scroll-list-wrapper {
+    margin-top: 10px;
+  }
+}
+</style>
+
+<style scoped lang="stylus">
+.index-wrap {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+
+  .content-scroll-wrapper {
+    flex: 1;
+    position: relative;
+    background-color: $bodyBg;
+
+    .content-scroll-list-wrap {
+      height: 100%;
+      width: 100%;
+      transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+  }
+
+  .banner-bg {
+    display: flex;
+    flex: 263px 0 0;
+    align-items: center;
+    height: 263px;
+    padding: 0 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: $fontClWhite;
+
+    .lf {
+      display: flex;
+      align-items: center;
+      flex: 1;
+
+      .avt {
+        width: 120px;
+        height: 120px;
+        border-radius: 100%;
+        overflow: hidden;
+        margin-right: 13px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .ct {
+        flex: 1;
+        max-width: 400px;
+
+        h3 {
+          font-size: 36px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .desc {
+          font-size: 28px;
+          margin-top: 19px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .share {
+      width: 90px;
+      height: 42px;
+      line-height: 40px;
+      text-align: center;
+      border: 2px solid $bdClWhite;
+      border-radius: 21px;
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .index-tab {
+    .filter {
+      ul {
+        display: flex;
+        align-items: center;
+        height: 98px;
+        padding: 0 42px;
+
+        li {
+          width: 100px;
+          height: 48px;
+          line-height: 46px;
+          border: 2px solid $bdCl;
+          color: $grayCl;
+          border-radius: 24px;
+          text-align: center;
+          margin-right: 38px;
+
+          &.active {
+            border-color: $themeCl;
+            color: $themeCl;
+          }
+        }
+      }
+    }
+  }
+
+  .list-item {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 19px;
+    background-color: #fff;
+
+    .poster {
+      width: 195px;
+      height: 272px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      margin-right: 25px;
+    }
+
+    .it-r {
+      display: flex;
+      flex-flow: column;
+      flex: 1;
+
+      .tt {
+        color: $titleCl;
+        font-size: 30px;
+        margin-top: 10px;
+      }
+
+      .mid {
+        flex: 1;
+        margin-top: 24px;
+
+        .time, .address {
+          color: $grayCl;
+          font-size: 22px;
+        }
+
+        .address {
+          margin-top: 20px;
+        }
+      }
+
+      .bottom {
+        display: flex;
+        align-items: center;
+
+        .lf {
+          flex: 1;
+
+          .pc {
+            display: flex;
+            align-items: baseline;
+            color: $themeCl;
+
+            .mb {
+              font-size: 24px;
+              margin-right: 15px;
+            }
+
+            .price {
+              font-size: 32px;
+              margin-bottom: 10px;
+            }
+          }
+
+          .original {
+            color: $grayCl;
+            font-size: 22px;
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    width: 140px;
+    height: 50px;
+    background: $themeCl;
+    color: $fontClWhite;
+    border-radius: 25px;
+    text-align: center;
+    line-height: 48px;
+
+    &:active {
+      opacity: 0.8;
+    }
+  }
+}
+</style>

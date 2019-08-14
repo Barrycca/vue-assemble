@@ -1,0 +1,115 @@
+<template>
+  <div class="myOrder-wrap">
+    <v-header title="我的订单" :haveBack="true"></v-header>
+    <div class="tab">
+      <ul>
+        <li
+          v-for="(item,index) in tabList"
+          :key="index"
+          :class="{'active':selectType==index}"
+          @click="tabClick(index)"
+        >{{item}}</li>
+      </ul>
+      {{list}}
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+import { countDownFun } from "../../assets/js/common";
+export default {
+  name: "myOrder",
+  components: {
+    vHeader
+  },
+  data: function() {
+    return {
+      tabList: ["全部", "已付款", "待付款", "已关闭"],
+      selectType: 0,
+      list: [
+        // 准备渲染的数据
+        {
+          remainTime: 900000, // 距离结束还有多久
+          remainTimeStr: "" // 展示文案
+        },
+        {
+          remainTime: 400000,
+          remainTimeStr: ""
+        },
+        {
+          remainTime: 60500,
+          remainTimeStr: ""
+        }
+      ]
+    };
+  },
+  created() {
+    this.countdown();
+  },
+  methods: {
+    countdown() {
+      let self = this;
+      let timer = setInterval(function() {
+        for (let i = 0; i < self.list.length; i++) {
+          self.list[i].remainTime -= 1000;
+          let t = self.list[i].remainTime;
+          if (t > 0) {
+            let day = Math.floor(t / 86400000);
+            let hour = Math.floor((t / 3600000) % 24);
+            let min = Math.floor((t / 60000) % 60);
+            let sec = Math.floor((t / 1000) % 60);
+            day = day < 10 ? "0" + day : day;
+            hour = hour < 10 ? "0" + hour : hour;
+            min = min < 10 ? "0" + min : min;
+            sec = sec < 10 ? "0" + sec : sec;
+            let format = "";
+            format = `距离结束：<b>${day}</b> 天 <b>${hour}</b> 
+时 <b>${min}</b> 分 <b>${sec}</b> 秒`;
+            self.list[i].remainTimeStr = format;
+          } else {
+            // 进行判断 如果数据内所有的倒计时已经结束，那么结束定时器， 如果没有那么继续执行定时器
+            let flag = self.list.every((val, ind) => val.remainTime <= 0);
+            if (flag) clearInterval(timer);
+            self.list[i].remainTimeStr = "交易取消"; // 结束文案
+          }
+        }
+      }, 1000);
+    },
+    tabClick(index) {
+      this.selectType = index;
+    }
+  },
+  destroyed() {
+    this.list.forEach(val => {
+      val.remainTime = 0;
+    });
+  }
+};
+</script>
+
+<style scoped lang="stylus">
+.myOrder-wrap {
+  background-color: $bodyBg;
+
+  .tab {
+    background-color: $bgWhite;
+
+    ul {
+      display: flex;
+      font-size: 28px;
+      margin: 0 103px;
+      justify-content: space-between;
+
+      li {
+        padding: 30px 0;
+        border-bottom: 4px solid transparent;
+
+        &.active {
+          border-color: $themeCl;
+        }
+      }
+    }
+  }
+}
+</style>

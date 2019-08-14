@@ -1,0 +1,18 @@
+$headerBg = #282828;
+$headerCl = #fff;
+$fontClWhite = #fff;
+$bdClWhite = #fff;
+$bgWhite = #fff;
+$bdCl = #999999;
+$lineCl = #F0F0F0;
+$grayCl = #999999;
+$themeCl = #E5004F;
+$greenCl = #14AE67;
+$pinkCl = #F17394;
+$bodyBg = #F2F2F2;
+$titleCl = #000000;
+$subCl = #666666;
+$ipCl = #333333;
+$tipsCl = #bbb;
+// 字号
+$headerFz = 36px;

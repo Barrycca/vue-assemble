@@ -1,0 +1,101 @@
+<template>
+  <div class="mine-wrap">
+    <v-header title="我的" :haveBack="false"></v-header>
+    <div class="banner-bg" :style="{backgroundImage:'url(' + bannerBg + ')'}">
+      <div class="lf">
+        <div class="avt">
+          <img src="../../../static/images/header.png" alt>
+        </div>
+        <div class="ct">
+          <h3>乐现场</h3>
+          <div class="desc">提供最好玩的娱乐生活</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "mine",
+  components: {
+    vHeader
+  },
+  data() {
+    return {
+      bannerBg: "/static/images/header_bg.png"
+    };
+  },
+  methods: {},
+  mounted() {},
+  activated() {}
+};
+</script>
+
+<style scoped lang="stylus">
+.mine-wrap {
+  .banner-bg {
+    display: flex;
+    flex: 263px 0 0;
+    align-items: center;
+    height: 263px;
+    padding: 0 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: $fontClWhite;
+
+    .lf {
+      display: flex;
+      align-items: center;
+      flex: 1;
+
+      .avt {
+        width: 120px;
+        height: 120px;
+        border-radius: 100%;
+        overflow: hidden;
+        margin-right: 13px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .ct {
+        flex: 1;
+        max-width: 400px;
+
+        h3 {
+          font-size: 36px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .desc {
+          font-size: 28px;
+          margin-top: 19px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .share {
+      width: 90px;
+      height: 42px;
+      line-height: 40px;
+      text-align: center;
+      border: 2px solid $bdClWhite;
+      border-radius: 21px;
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+</style>

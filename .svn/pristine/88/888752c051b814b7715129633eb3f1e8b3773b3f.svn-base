@@ -1,0 +1,30 @@
+<template>
+  <div class="myOrder-wrap">
+    <v-header title="我的订单" :haveBack="true"></v-header>
+    <div class="tab">
+      <ul>
+        <li>全部</li>
+        <li>已付款</li>
+        <li>待付款</li>
+        <li>已关闭</li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "myOrder",
+  components: {
+    vHeader
+  },
+  data: function() {
+    return {};
+  },
+  methods: {}
+};
+</script>
+
+<style scoped lang="stylus">
+</style>

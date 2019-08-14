@@ -1,0 +1,619 @@
+<template>
+  <div class="assemble-wrap">
+    <v-header title="拼团" :haveBack="true"></v-header>
+    <div class="ass-wrap">
+      <div class="items" v-if="!joined">
+        <div class="poster" :style="{backgroundImage:'url(' + bannerBg + ')'}"></div>
+        <div class="it-r">
+          <div class="tt">奔跑吧2016 浙江卫视跨年演唱会</div>
+          <div class="mid">
+            <div class="time">2015.12.31(周六)</div>
+            <div class="address">华润深圳湾体育中心＂春茧＂体育场</div>
+          </div>
+          <div class="bottom">
+            <div class="lf">
+              <div class="pc">
+                <div class="price">￥380-￥1238</div>
+                <div class="mb">2人团</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="statistics">
+        <div class="state">
+          <!-- 正在拼团 -->
+          <div class="ing" v-if="assembleState==1">
+            <div class="time">
+              <div class="t-txt">剩余</div>
+              <div class="cut-down">
+                <p>{{hr}}</p>
+                <span class="colon">:</span>
+                <p>{{min}}</p>
+                <span class="colon">:</span>
+                <p>{{sec}}</p>
+              </div>
+            </div>
+            <div class="total">
+              已有
+              <span class="alr">1</span> 人参与，还差
+              <span class="catch">4</span> 人拼团成功
+            </div>
+          </div>
+          <!-- 拼团成功 -->
+          <div class="success st-box" v-if="assembleState==2">
+            <div class="show-txt">
+              <i class="icon suc-icon"></i>
+              <div class="st">拼团成功</div>
+            </div>
+            <div class="s-tips">好友已拼团成功，赶快自己发起拼团</div>
+          </div>
+          <!-- 拼团失败 -->
+          <div class="fail st-box" v-if="assembleState==0">
+            <div class="show-txt">
+              <i class="icon fail-icon"></i>
+              <div class="st">拼团失败</div>
+            </div>
+            <div class="s-tips">好友拼团失败，赶快自己发起拼团</div>
+          </div>
+        </div>
+        <div class="member">
+          <ul>
+            <li>
+              <div class="u-avt" :style="{backgroundImage:'url(' + '/static/images/av.png' + ')'}">
+                <div class="lab">团长</div>
+              </div>
+              <div class="name">wilbur</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+            <li>
+              <div class="u-avt"></div>
+              <div class="name">待参团</div>
+            </li>
+          </ul>
+        </div>
+        <template v-if="!joined">
+          <!-- 未参团按钮 -->
+          <div class="j-btn" v-if="assembleState==1">我要参团</div>
+          <div class="j-btn" v-else>发起拼团</div>
+        </template>
+        <template v-else>
+          <!-- 已参团按钮 -->
+          <!-- 正在拼 -->
+          <div class="j-btn" v-if="assembleState==1" @click="popShow=true">邀请好友拼团</div>
+          <!-- 拼成功 -->
+          <div class="j-btn" v-if="assembleState==2">查看订单</div>
+          <!-- 拼失败 -->
+          <div class="j-btn" v-if="assembleState==0">发起拼团</div>
+        </template>
+      </div>
+      <!-- 未参团显示 -->
+      <div class="explain" v-if="!joined">
+        <div class="rule" @click="ruleToast">
+          <div class="lf">拼团玩法</div>
+          <div class="rt">
+            <div class="sm">拼团规则</div>
+            <div class="arr"></div>
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num1">1</i>
+              <div class="txt">开团或参团</div>
+            </div>
+          </div>
+          <div class="st-ar"></div>
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num2">2</i>
+              <div class="txt">开团或参团</div>
+            </div>
+          </div>
+          <div class="st-ar"></div>
+          <div class="step">
+            <div class="sb">
+              <i class="icon-num num3">3</i>
+              <div class="txt">开团或参团</div>
+            </div>
+            <div class="tips">（不满自动退款）</div>
+          </div>
+        </div>
+      </div>
+      <!-- 已参团显示 -->
+      <div class="order-bx">
+        <div class="tt">订单信息</div>
+        <div class="order-bg">
+          <div class="order-item">
+            <div class="order-name">
+              方大同Soulboy Lights Up巡回演出会限量
+              周边-运动毛巾
+            </div>
+            <div class="perf-time">2019.06.15 周六 19:30</div>
+            <div class="perf-ad">深圳市宝安体育中心体育馆</div>
+            <div class="amount">
+              <div class="price">￥100</div>
+              <div class="nums">/ 共2张票</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="share-pop" v-show="popShow" @click="popShow=false">
+      <img src="../../../static/images/tips.png" alt>
+    </div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "assemble",
+  components: {
+    vHeader
+  },
+  data() {
+    return {
+      bannerBg: "/static/images/header_bg.png",
+      endTime: "2019-06-15 10:40:00",
+      hr: 0,
+      min: 0,
+      sec: 0,
+      /* 拼团状态 0失败，1进行中，2成功*/
+      assembleState: 1,
+      /* 你是否参团 */
+      joined: true,
+      popShow: false
+    };
+  },
+  methods: {
+    ruleToast() {
+      this.toast("暂无规则");
+    },
+    countdown() {
+      //ios时间戳兼容
+      let endTime = Date.parse(this.endTime.replace(/-/g, "/"));
+      const end = new Date(endTime).getTime();
+      const now = new Date().getTime();
+      const msec = end - now;
+      let hr = parseInt(msec / 1000 / 60 / 60);
+      let min = parseInt((msec / 1000 / 60) % 60);
+      let sec = parseInt((msec / 1000) % 60);
+      this.hr = hr > 9 ? hr : "0" + hr;
+      this.min = min > 9 ? min : "0" + min;
+      this.sec = sec > 9 ? sec : "0" + sec;
+      const that = this;
+      setTimeout(function() {
+        that.countdown();
+      }, 1000);
+    }
+  },
+  mounted() {
+    this.countdown();
+  },
+  activated() {}
+};
+</script>
+
+<style scoped lang="stylus">
+.assemble-wrap {
+  position: relative;
+  background-color: $bodyBg;
+
+  .ass-wrap {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 88px);
+  }
+
+  .share-pop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .items {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 19px;
+    background-color: #fff;
+
+    .poster {
+      width: 195px;
+      height: 272px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      margin-right: 25px;
+    }
+
+    .it-r {
+      display: flex;
+      flex-flow: column;
+      flex: 1;
+
+      .tt {
+        color: $titleCl;
+        font-size: 30px;
+        margin-top: 10px;
+      }
+
+      .mid {
+        flex: 1;
+        margin-top: 24px;
+
+        .time, .address {
+          color: $grayCl;
+          font-size: 22px;
+        }
+
+        .address {
+          margin-top: 20px;
+        }
+      }
+
+      .bottom {
+        display: flex;
+        align-items: center;
+
+        .lf {
+          flex: 1;
+
+          .pc {
+            display: flex;
+            align-items: baseline;
+            color: $themeCl;
+            margin-bottom: 16px;
+
+            .mb {
+              font-size: 24px;
+            }
+
+            .price {
+              font-size: 32px;
+              margin-right: 15px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .statistics {
+    padding: 74px 45px 28px;
+    background-color: $bgWhite;
+
+    .state {
+      .ing {
+        text-align: center;
+
+        .time {
+          justify-content: center;
+          display: flex;
+          align-items: center;
+
+          .t-txt {
+            font-size: 30px;
+            margin-right: 23px;
+            color: $subCl;
+          }
+
+          .cut-down {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+
+            p {
+              width: 44px;
+              height: 44px;
+              line-height: 44px;
+              text-align: center;
+              background-color: $headerBg;
+              color: $fontClWhite;
+            }
+
+            span {
+              &.colon {
+                padding: 0 9px;
+              }
+            }
+          }
+        }
+
+        .total {
+          margin-top: 28px;
+          color: $ipCl;
+          font-size: 26px;
+
+          .alr {
+            color: $themeCl;
+            font-size: 32px;
+            font-weight: bold;
+          }
+
+          .catch {
+            font-size: 32px;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .st-box {
+        text-align: center;
+
+        &.success {
+          .show-txt {
+            color: $greenCl;
+          }
+        }
+
+        &.fail {
+          .show-txt {
+            color: $themeCl;
+          }
+        }
+
+        .show-txt {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 58px;
+
+          >.icon {
+            width: 70px;
+            height: 70px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            margin-right: 17px;
+
+            &.suc-icon {
+              background-image: url('/static/images/success.png');
+            }
+
+            &.fail-icon {
+              background-image: url('/static/images/fail.png');
+            }
+          }
+        }
+
+        .s-tips {
+          font-size: 26px;
+          margin-top: 36px;
+        }
+      }
+    }
+
+    .member {
+      margin-top: 70px;
+
+      ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 45px;
+
+        li {
+          position: relative;
+          text-align: center;
+
+          .u-avt {
+            width: 80px;
+            height: 80px;
+            background-image: url('/static/images/member.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            .lab {
+              position: absolute;
+              bottom: 30px;
+              left: 50%;
+              margin-left: -30px;
+              min-width: 60px;
+              display: inline-block;
+              font-size: 14px;
+              background-color: $themeCl;
+              padding: 4px 6px;
+              border-radius: 4px;
+              color: $fontClWhite;
+            }
+          }
+
+          .name {
+            margin-top: 20px;
+          }
+        }
+      }
+    }
+
+    .j-btn {
+      height: 80px;
+      line-height: 80px;
+      font-size: 32px;
+      text-align: center;
+      color: $fontClWhite;
+      background-color: $themeCl;
+      border-radius: 80px;
+      margin-top: 64px;
+      cursor: pointer;
+    }
+  }
+
+  .explain {
+    background-color: $bgWhite;
+    margin-top: 10px;
+
+    .rule {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 20px 26px 0;
+      margin-left: 20px;
+      border-bottom: 1px solid $lineCl;
+
+      .lf {
+        font-size: 28px;
+        color: $ipCl;
+      }
+
+      .rt {
+        display: flex;
+        align-items: center;
+
+        .sm {
+          font-size: 24px;
+          color: $grayCl;
+          margin-right: 10px;
+        }
+
+        .arr {
+          width: 26px;
+          height: 26px;
+          background-image: url('/static/images/in1.png');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+        }
+      }
+    }
+
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 25px 20px 157px;
+
+      .st-ar {
+        width: 24px;
+        height: 24px;
+        background-image: url('/static/images/in1.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .step {
+        font-size: 26px;
+        text-align: center;
+
+        .tips {
+          font-size: 22px;
+          color: $tipsCl;
+          margin-top: 9px;
+        }
+
+        .sb {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .icon-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 30px 0 0;
+            font-size: 22px;
+            width: 30px;
+            height: 30px;
+            background: #666;
+            color: $fontClWhite;
+            border-radius: 100%;
+            /* &.num1 {
+                          background-image: url('/static/images/1.png');
+                        }
+            
+                        &.num2 {
+                          background-image: url('/static/images/2.png');
+                        }
+            
+                        &.num3 {
+                          background-image: url('/static/images/3.png');
+                        } */
+          }
+        }
+      }
+    }
+  }
+
+  .order-bx {
+    flex: 1;
+    padding: 38px 0;
+    background-color: $bgWhite;
+    margin-top: 10px;
+
+    .tt {
+      margin: 0 20px;
+      font-size: 28px;
+      color: $ipCl;
+    }
+
+    .order-bg {
+      height: 303px;
+      background-image: url('/static/images/order_bg.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      padding: 20px;
+      margin-top: 10px;
+
+      .order-item {
+        padding: 31px 28px;
+
+        .order-name {
+          max-width: 553px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          font-size: 30px;
+          color: $ipCl;
+          line-height: 1.2;
+        }
+
+        .perf-time, .perf-ad {
+          font-size: 20px;
+          color: $grayCl;
+          margin-top: 18px;
+        }
+
+        .amount {
+          display: flex;
+          align-items: center;
+          margin-top: 30px;
+
+          .price {
+            font-size: 36px;
+            color: $themeCl;
+          }
+
+          .nums {
+            font-size: 12px;
+            color: $ipCl;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

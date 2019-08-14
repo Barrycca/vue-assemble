@@ -1,0 +1,188 @@
+<template>
+  <div class="address-wrap">
+    <v-header title="购票人地址" :haveBack="true"></v-header>
+    <div class="address-list">
+      <ul>
+        <li v-for="(item,index) in addressList" :key="index">
+          <div class="ad-box">
+            <div class="lf">
+              <div class="user-info">
+                <div class="name">威尔伯</div>
+                <div class="phone">13147007000</div>
+              </div>
+              <div class="ad">深圳市罗湖区文华大厦10d</div>
+            </div>
+            <div class="rt">
+              <div class="op-btn edt" @click="toEdit"></div>
+              <div class="op-btn del" @click="sureDelete(100)"></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="bottom-btn" @click="toAdd">新建观演人地址</div>
+  </div>
+</template>
+
+<script>
+import vHeader from "../../components/vHeader.vue";
+export default {
+  name: "addressList",
+  components: {
+    vHeader
+  },
+  data() {
+    return {
+      addressList: [, ,]
+    };
+  },
+  methods: {
+    //获取地址列表
+    getList() {
+      this.$api.address
+        .addressList({
+          ticketId: ticketId
+        })
+        .then(res => {
+          // 执行某些操作
+          this.toast("请求了");
+        });
+    },
+    //确认删除？
+    sureDelete(id) {
+      this.$createDialog({
+        type: "confirm",
+        title: "温馨提示",
+        content: "确认删除该地址？",
+        confirmBtn: {
+          text: "确认",
+          active: true,
+          disabled: false,
+          href: "javascript:;"
+        },
+        cancelBtn: {
+          text: "取消",
+          active: false,
+          disabled: false,
+          href: "javascript:;"
+        },
+        onConfirm: () => {
+          this.deleteAd(id);
+        },
+        onCancel: () => {}
+      }).show();
+    },
+    //删除地址
+    deleteAd(id) {
+      this.$api.address
+        .deleteAdress({
+          addressID: id
+        })
+        .then(res => {
+          // 执行某些操作
+          this.toast("删除成功");
+        });
+    },
+    //去新增地址
+    toAdd() {
+      this.$router.push("/addressInfo");
+    },
+    //编辑地址
+    toEdit() {
+      this.$router.push({
+        path: "/addressInfo",
+        query: {
+          addressID: 100
+        }
+      });
+    }
+  },
+  mounted() {},
+  activated() {}
+};
+</script>
+
+<style scoped lang="stylus">
+.address-wrap {
+  height: 100%;
+  background-color: $bodyBg;
+
+  .address-list {
+    height: calc(100% - 186px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    ul {
+      background-color: $bgWhite;
+      padding-bottom: 44px;
+
+      li {
+        .ad-box {
+          display: flex;
+          align-items: center;
+          padding: 30px 40px 30px 0;
+          border-bottom: 1px solid $lineCl;
+          margin-left: 20px;
+
+          .lf {
+            flex: 1;
+
+            .user-info {
+              display: flex;
+              align-items: center;
+              color: $titleCl;
+              font-size: 30px;
+            }
+
+            .ad {
+              font-size: 24px;
+              color: $grayCl;
+              margin-top: 16px;
+            }
+          }
+
+          .rt {
+            display: flex;
+            align-items: center;
+
+            .op-btn {
+              width: 44px;
+              height: 44px;
+              background-repeat: no-repeat;
+              background-size: contain;
+              background-position: center;
+              margin-right: 20px;
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              &.edt {
+                background-image: url('/static/images/edt.png');
+              }
+
+              &.del {
+                background-image: url('/static/images/delete.png');
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .bottom-btn {
+    font-size: 32px;
+    height: 98px;
+    line-height: 98px;
+    text-align: center;
+    background-color: $themeCl;
+    color: $fontClWhite;
+
+    &:active {
+      opacity: 0.8;
+    }
+  }
+}
+</style>
